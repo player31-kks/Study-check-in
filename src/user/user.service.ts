@@ -8,10 +8,10 @@ import { CreateUserDto } from './user.dto';
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async getUsers() {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find()
     return users;
   }
 
@@ -21,7 +21,7 @@ export class UserService {
   }
 
   async createUser(userInfo: CreateUserDto) {
-    const newUser = await this.userRepository.create(userInfo);
+    const newUser = await this.userRepository.save({ ...userInfo, status: false });
     return newUser;
   }
 }
