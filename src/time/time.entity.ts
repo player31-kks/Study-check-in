@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Time {
@@ -6,11 +7,11 @@ export class Time {
   public id: number;
 
   @Column()
-  public user: number;
+  public startTime: Date;
 
   @Column()
-  public startTime: number;
+  public endTime: Date;
 
-  @Column()
-  public endTime: number;
+  @ManyToOne(() => User, (user: User) => user.time)
+  public user: User
 }

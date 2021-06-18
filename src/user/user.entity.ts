@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Time } from 'src/time/time.entity';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -9,11 +10,14 @@ export class User {
   public name: string;
 
   @Column()
-  public email: string;
-
-  @Column()
   public password: string;
 
   @Column()
   public status: boolean;
+
+  @Column()
+  public createdAt: Date;
+
+  @OneToMany(() => Time, (time: Time) => time.user)
+  public time: Time[];
 }
