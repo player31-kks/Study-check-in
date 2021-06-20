@@ -16,6 +16,7 @@ export class UserService {
   ) { }
 
   async createUser(userInfo: UserDto) {
+    if (userInfo.name === '') throw new Error("이름을 작성해주세요.")
     const user = await this.userRepository.findOne({ name: userInfo.name })
     if (user) throw new Error("이미 존재하는 이름입니다. 이름을 살짝 바꿔주세요.")
 
