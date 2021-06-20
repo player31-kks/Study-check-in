@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './user.dto';
 import { map } from 'rxjs/operators';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -13,7 +14,9 @@ export class UserController {
   }
 
   @Get('/:id')
-  async getUserById(@Param('id') userId: string) {
+  @UseGuards(new AuthGuard())
+  async getUserById(@Param('id') userId: string, @Headers() headers) {
+    console.log(headers)
     return this.userService.getUserById(userId);
   }
 
