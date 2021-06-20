@@ -7,10 +7,13 @@ export class Time {
   public id: number;
 
   @Column()
-  public startTime: Date;
+  public status: boolean;
 
   @Column()
-  public endTime: Date;
+  public startTime: Date;
+
+  @Column({ nullable: true })
+  public endTime?: Date;
 
   @ManyToOne(() => User, (user: User) => user.time)
   @JoinColumn({ name: 'ref_userId' })
