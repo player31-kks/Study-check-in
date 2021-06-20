@@ -22,11 +22,11 @@ export class UserService {
 
     return this.authService.hashPassword(userInfo.password).pipe(
       switchMap((passwordHash: string) => {
-        const date = Date.now() + (1000 * 60 * 60 * 9)
+        const curr_time = Date.now() + (1000 * 60 * 60 * 9)
         const newUser = new User()
         newUser.name = userInfo.name
         newUser.status = false
-        newUser.createdAt = new Date(date)
+        newUser.createdAt = new Date(curr_time)
         newUser.password = passwordHash
 
         return from(this.userRepository.save(newUser)).pipe(
