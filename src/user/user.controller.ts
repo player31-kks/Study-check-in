@@ -14,9 +14,7 @@ export class UserController {
   }
 
   @Get('/:id')
-  @UseGuards(new AuthGuard())
-  async getUserById(@Param('id') userId: string, @Headers() headers) {
-    console.log(headers)
+  async getUserById(@Param('id') userId: string) {
     return this.userService.getUserById(userId);
   }
 
