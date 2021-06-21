@@ -14,7 +14,8 @@ export class TimeService {
     @InjectRepository(Hours) private hoursRepository: Repository<Hours>
   ) { }
 
-  async checkIn(headers: any) {
+  async checkIn(headers: any, name: string) {
+    if (headers.user.name !== name) throw new Error("다른 사람은 체크인할 수 없습니다.")
     const user = await this.userRepository.findOne({ name: headers.user.name })
     if (!user) throw new Error("로그인 정보가 잘못되었습니다. 다시 로그인해주세요.")
     if (user.status === true) throw new Error("이미 체크인되어 있습니다.")
@@ -30,7 +31,10 @@ export class TimeService {
     return time
   }
 
-  async checkOut(headers: any) {
+  async checkOut(headers: any, name: string) {
+    console.log(headers)
+    console.log(name)
+    if (headers.user.name !== name) throw new Error("다른 사람은 체크아웃할 수 없습니다.")
     const user = await this.userRepository.findOne({ name: headers.user.name })
     if (!user) throw new Error("로그인 정보가 잘못되었습니다. 다시 로그인해주세요.")
     if (user.status === false) throw new Error("이미 체크아웃되어 있습니다.")
