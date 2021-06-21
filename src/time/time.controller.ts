@@ -1,4 +1,4 @@
-import { Controller, Headers, Post, UseGuards } from '@nestjs/common';
+import { Controller, Headers, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TimeService } from './time.service';
 
@@ -6,15 +6,15 @@ import { TimeService } from './time.service';
 export class TimeController {
   constructor(private timeService: TimeService) { }
 
-  @Post('/checkin')
+  @Post('/checkin/:name')
   @UseGuards(new AuthGuard())
-  async checkIn(@Headers() headers) {
-    return this.timeService.checkIn(headers)
+  async checkIn(@Param('name') name: string, @Headers() headers) {
+    return this.timeService.checkIn(headers, name)
   }
 
-  @Post('/checkout')
+  @Post('/checkout/:name')
   @UseGuards(new AuthGuard())
-  async checkOut(@Headers() headers) {
-    return this.timeService.checkOut(headers)
+  async checkOut(@Param('name') name: string, @Headers() headers) {
+    return this.timeService.checkOut(headers, name)
   }
 }

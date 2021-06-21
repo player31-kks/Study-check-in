@@ -29,81 +29,48 @@
 
   <script>
     $(document).ready(function () {
-      getUsers()
-    })
+      $("#login").on("click", login);
 
-    function getUsers() {
-      $.ajax({
-        type: "GET",
-        url: `/user`,
-        data: {},
-        success: function (response) {
-          response.reverse() // 최신이 위로 오기위해
-          for (let i = 0; i < response.length; i++) {
-            makeCard(response[i].name, response[i].status)
-          }
-        }
-      })
-    }
-
-    function makeCard(name, status) {
-      if (status === true) {
-        let htmlTemp = `<button type="button" class="btn btn-outline-primary btn-xl checkedIn" onclick="signInOut(${status}, ${name})">${name}</button>`
-        $("#userList").append(htmlTemp)
-      } else {
-        let htmlTemp = `<button type="button" class="btn btn-outline-primary btn-xl checkedOut" onclick="signInOut(${status}, ${name})">${name}</button>`
-        $("#userList").append(htmlTemp)
-      }
-    }
-
-    function signInOut(status, name) {
-      if (status === true) {
-        var token = localStorage.getItem("token");
+      function login() {
+        localStorage.clear()
         $.ajax({
           type: "POST",
-          url: `/time/checkout/${name}`,
-          //dataType: 'json',
-          beforeSend: function (xhr) {
-            xhr.setRequestHeader("Content-type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer " + token);
+          url: `/user/login`,
+          data: {
+            name: document.getElementById("nameInput").value,
+            password: document.getElementById("passwordInput").value
           },
-          //headers: { 'Authorization': "Bearer" + token },
-          //data: {},
+          dataType: 'json',
           success: function (response) {
             console.log(response)
-            location.reload()
+            localStorage.setItem('token', response.token)
+          },
+          error: function (err) {
+            console.log(err)
+          },
+          complete: function (data) {
+            window.location.href = '/'
           }
         })
+        return false
       }
-    }
-
+    })
   </script>
-  <style>
-    .checkedIn {
-      font-weight: bolder;
-      color: black;
-      background-color: dodgerblue;
-    }
-
-    .checkedOut {
-      font-weight: bolder;
-      color: black;
-      background-color: white;
-    }
-
-    .btn-xl {
-      width: 350px;
-      height: 150px;
-      font-size: 60px;
-      border-radius: 10px;
-      margin: 30px;
-    }
-  </style>
 </head>
 
 <body>
-  <h5>By 박현준 금교석</h5>
-  <div id="userList"></div>
+  <h1>로그인</h1>
+  <form>
+    <div class="form-group">
+      <label for="exampleInputEmail1">이름</label>
+      <input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" placeholder="이름을 적어주세요">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">비밀번호</label>
+      <input type="password" class="form-control" id="passwordInput" placeholder="비밀번호를 적어주세요">
+    </div>
+    <button type="submit" class="btn btn-primary" id="login">로그인</button>
+  </form>
 </body>
 
 </html>
