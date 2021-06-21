@@ -1,3 +1,4 @@
+import { Hours } from 'src/time/hours.entity';
 import { Time } from 'src/time/time.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -20,4 +21,7 @@ export class User {
 
   @OneToMany(() => Time, (time: Time) => time.user)
   public time: Time[];
+
+  @OneToMany(() => Hours, (hours: Hours) => hours.user)
+  public hours: Hours[];
 }

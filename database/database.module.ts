@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from 'src/user/user.entity';
 import { Time } from 'src/time/time.entity';
+import { Hours } from 'src/time/hours.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Time } from 'src/time/time.entity';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [User, Time],
+        entities: [User, Time, Hours],
         synchronize: true,
       }),
     }),
