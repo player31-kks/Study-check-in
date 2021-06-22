@@ -38,7 +38,9 @@
         url: `/user`,
         data: {},
         success: function (response) {
-          response.sort() // 최신이 위로 오기위해
+          response.sort(function (a, b) {
+            return a.id - b.id
+          })
           for (let i = 0; i < response.length; i++) {
             makeCard(response[i].name, response[i].status)
           }

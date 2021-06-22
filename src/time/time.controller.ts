@@ -1,4 +1,4 @@
-import { Controller, Headers, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Headers, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TimeService } from './time.service';
 
@@ -16,5 +16,10 @@ export class TimeController {
   @UseGuards(new AuthGuard())
   async checkOut(@Param('name') name: string, @Headers() headers) {
     return this.timeService.checkOut(headers, name)
+  }
+
+  @Get('/')
+  async getTotalTime() {
+    return this.timeService.getTotalTime()
   }
 }

@@ -62,4 +62,35 @@ export class TimeService {
     }
     return time
   }
+
+  async getTotalTime() {
+    // 요청할때마다 계산하지말고 나중에 스케쥴러로 돌려서 테이블에 따로 저장하는거 만들기
+    const users = await this.userRepository.find({ relations: ["hours"] })
+    const hours = await this.hoursRepository.find()
+
+    const now = new Date().getTime() + (1000 * 60 * 60 * 9)
+    const oneDay = new Date(now - (1000 * 60 * 60 * 24)).toDateString()
+    const twoDays = new Date(now - (1000 * 60 * 60 * 24 * 2)).toDateString()
+    const threeDays = new Date(now - (1000 * 60 * 60 * 24 * 3)).toDateString()
+    const fourDays = new Date(now - (1000 * 60 * 60 * 24 * 4)).toDateString()
+    const fiveDays = new Date(now - (1000 * 60 * 60 * 24 * 5)).toDateString()
+    const sixDays = new Date(now - (1000 * 60 * 60 * 24 * 6)).toDateString()
+    const sevenDays = new Date(now - (1000 * 60 * 60 * 24 * 7)).toDateString()
+
+    const result = []
+    for (let i = 0; i < users.length; i++) {
+      let temp = [users[i].name, 0, 0, 0, 0, 0, 0, 0]
+      for (let j = 0; j < users[i].hours.length; j++) {
+        if (users[i].hours[j].date === oneDay) { temp[1] = users[i].hours[j].time }
+        else if (users[i].hours[j].date === twoDays) { temp[2] = users[i].hours[j].time }
+        else if (users[i].hours[j].date === threeDays) { temp[3] = users[i].hours[j].time }
+        else if (users[i].hours[j].date === fourDays) { temp[4] = users[i].hours[j].time }
+        else if (users[i].hours[j].date === fiveDays) { temp[5] = users[i].hours[j].time }
+        else if (users[i].hours[j].date === sixDays) { temp[6] = users[i].hours[j].time }
+        else if (users[i].hours[j].date === sevenDays) { temp[7] = users[i].hours[j].time }
+      }
+      result.push(temp)
+    }
+    return result
+  }
 }
