@@ -38,7 +38,7 @@
         url: `/user`,
         data: {},
         success: function (response) {
-          response.reverse() // 최신이 위로 오기위해
+          response.sort() // 최신이 위로 오기위해
           for (let i = 0; i < response.length; i++) {
             makeCard(response[i].name, response[i].status)
           }
@@ -48,32 +48,11 @@
 
     function makeCard(name, status) {
       if (status === true) {
-        let htmlTemp = `<button type="button" class="btn btn-outline-primary btn-xl checkedIn" onclick="signInOut(${status}, ${name})">${name}</button>`
+        let htmlTemp = `<button type="button" class="btn btn-outline-primary btn-xl checkedIn" id="checkedIn" value="${name}">${name}</button>`
         $("#userList").append(htmlTemp)
       } else {
-        let htmlTemp = `<button type="button" class="btn btn-outline-primary btn-xl checkedOut" onclick="signInOut(${status}, ${name})">${name}</button>`
+        let htmlTemp = `<button type="button" class="btn btn-outline-primary btn-xl checkedOut" id="checkedOut" value="${name}">${name}</button>`
         $("#userList").append(htmlTemp)
-      }
-    }
-
-    function signInOut(status, name) {
-      if (status === true) {
-        var token = localStorage.getItem("token");
-        $.ajax({
-          type: "POST",
-          url: `/time/checkout/${name}`,
-          //dataType: 'json',
-          beforeSend: function (xhr) {
-            xhr.setRequestHeader("Content-type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer " + token);
-          },
-          //headers: { 'Authorization': "Bearer" + token },
-          //data: {},
-          success: function (response) {
-            console.log(response)
-            location.reload()
-          }
-        })
       }
     }
 
@@ -102,8 +81,60 @@
 </head>
 
 <body>
-  <h5>By 박현준 금교석</h5>
+  <div>
+    <a href='/register'>이름 등록</a>
+    <a href='/login'>로그인하기</a>
+    <a href='/totaltime'>누적 시간 확인</a>
+  </div>
+  <div>이 백엔드의 뷰에 담긴 철학을 아시겠어요?</div>
   <div id="userList"></div>
 </body>
+
+<script>
+
+  window.onload = function () {
+
+    var checkedIn = document.getElementsByClassName("checkedIn")
+    for (i = 0; i < checkedIn.length; i++) {
+      checkedIn[i].addEventListener("click", function () {
+        var token = localStorage.getItem("token");
+        $.ajax({
+          type: "POST",
+          url: `/time/checkout/${this.value}`,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+          },
+          success: function (response) {
+            console.log(response)
+            setTimeout(function () {
+              location.reload()
+            }, 500)
+          }
+        })
+      })
+    }
+    var checkedOut = document.getElementsByClassName("checkedOut")
+    for (i = 0; i < checkedOut.length; i++) {
+      checkedOut[i].addEventListener("click", function () {
+        var token = localStorage.getItem("token");
+        $.ajax({
+          type: "POST",
+          url: `/time/checkin/${this.value}`,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+          },
+          success: function (response) {
+            console.log(response)
+            setTimeout(function () {
+              location.reload()
+            }, 500)
+          }
+        })
+      })
+    }
+  }
+</script>
 
 </html>
