@@ -18,6 +18,10 @@ export class AppController {
   @Render('login')
   login() { }
 
+  @Get("/totaltime")
+  @Render('totalTime')
+  totalTime() { }
+
   // @Get()
   // getHello(): string {
   //   return this.appService.getHello();

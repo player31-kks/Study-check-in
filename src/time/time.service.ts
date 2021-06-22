@@ -32,8 +32,6 @@ export class TimeService {
   }
 
   async checkOut(headers: any, name: string) {
-    console.log(headers)
-    console.log(name)
     if (headers.user.name !== name) throw new Error("다른 사람은 체크아웃할 수 없습니다.")
     const user = await this.userRepository.findOne({ name: headers.user.name })
     if (!user) throw new Error("로그인 정보가 잘못되었습니다. 다시 로그인해주세요.")
