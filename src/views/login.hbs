@@ -43,6 +43,7 @@
           dataType: 'json',
           success: function (response) {
             console.log(response)
+            localStorage.setItem('name', document.getElementById("nameInput"))
             localStorage.setItem('token', response.token)
           },
           error: function (err) {

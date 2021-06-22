@@ -29,39 +29,70 @@
 
   <script>
     $(document).ready(function () {
-      getUsers()
+      getTotalTime()
     })
 
 
-    function getUsers() {
+    function getTotalTime() {
       $.ajax({
         type: "GET",
-        url: `/user`,
+        url: `/time`,
         data: {},
         success: function (response) {
-          response.sort() // 최신이 위로 오기위해
+          console.log(response)
           for (let i = 0; i < response.length; i++) {
-            makeCard(response[i].name, response[i].status)
+            makeLine(response[i])
           }
         }
       })
     }
+
+    function makeLine(oneList) {
+      const milliToHour = 1000 * 60 * 60
+      for (let i = 1; i < oneList.length; i++) {
+        oneList[i] = parseInt(oneList[i] / milliToHour)
+      }
+      let htmlTemp = `
+        <div>
+          <h5 class="line">${oneList[0]}</h5>
+          <h5 class="line">${oneList[7]}</h5>
+          <h5 class="line">${oneList[6]}</h5>
+          <h5 class="line">${oneList[5]}</h5>
+          <h5 class="line">${oneList[4]}</h5>
+          <h5 class="line">${oneList[3]}</h5>
+          <h5 class="line">${oneList[2]}</h5>
+          <h5 class="line">${oneList[1]}</h5>
+        </div>`
+      $("#userList").append(htmlTemp)
+    }
   </script>
+  <style>
+    .line {
+      display: inline-block;
+      width: 100px;
+    }
+  </style>
 </head>
 
 <body>
-  <form>
-    <div class="form-group">
-      <label for="exampleInputEmail1">이름</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-        placeholder="이름을 적어주세요">
-    </div>
-    <div class="form-group">
-      <label for="exampleInputPassword1">비밀번호</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="비밀번호를 적어주세요">
-    </div>
-    <button type="submit" class="btn btn-primary" onclick="">회원가입</button>
-  </form>
+  <div>
+    <a href='/'>메인으로 돌아가기</a>
+  </div>
+  <div>
+    <h3>누적 시간</h3>
+  </div>
+  <div>
+    <h5 class="line">이름</h5>
+    <h5 class="line">7일전</h5>
+    <h5 class="line">6일전</h5>
+    <h5 class="line">5일전</h5>
+    <h5 class="line">4일전</h5>
+    <h5 class="line">3일전</h5>
+    <h5 class="line">2일전</h5>
+    <h5 class="line">1일전</h5>
+  </div>
+  <div id="userList">
+  </div>
 </body>
 
 </html>
